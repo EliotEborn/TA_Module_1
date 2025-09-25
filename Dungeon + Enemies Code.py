@@ -67,9 +67,6 @@ def player_equip_sword(isEquipped, item_name):
         return True
     
 
-    
-
-
 
 def player_heal(item_name):
 
@@ -91,6 +88,7 @@ def player_heal(item_name):
 
         print(f"Your inventory is now {hero_inventory}")
 
+
 def use_item(): 
     item_name = input(f"What item do you want to use? {hero_inventory}\n")
     print (f"The item you want to use is {item_name}")
@@ -108,6 +106,7 @@ def use_item():
 
         case _: 
             print(f"{item_name} is not in your inventory")
+
 
 #Temporary Function for damaging player
 
@@ -151,7 +150,4 @@ while (isPlaying):
     elif (action == "move"):
         player_move()
     else: 
-        print (f"{action} is an invalid action")
-
-
-  
+        print (f"{action} is an invalid action") 
