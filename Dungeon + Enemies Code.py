@@ -4,6 +4,9 @@
 #Allow for ins and functions for attacking and using an item
 # Create a graphical grid representation for the game wolrd, player position needs to be indicated and the player needs to be able to move 
 
+# REMEMEBER ALL VARIABLES ARE CASE SENSITIVE SO APPLY THIS LOGIC WHEN WRITING CODE
+
+#Hero stats shown in a dictionary 
 
 hero_stats = {
     "name" : "hero", #key : value (name -> key) : (hero -> value)
@@ -14,35 +17,59 @@ hero_stats = {
 hero_max_health = 100
 
 health_potion_strength = 5
+
+#The hero inventory is written in a list because a list can be modified
+
 hero_inventory = ["sword", "health potion", "rope"]
 
 enemy_health = {
-    "goblin": 30,
-    "dragon": 200
+    "Fire Goblin": 30,
+    "Ice Dragon": 200
     }
 
+#Defining functions
+
 def quit ():
-    print ("You Chose to Flee\n")
+    print ("You Chose to Flee, You Are a Coward!\n")
     print ("GAME OVER!")
     return False
 
 def player_stats (): 
+    print ("You are:")
     for key, value in hero_stats.items():
         print(f"{key} : {value}" )
-
-def enemy_1_stats():
-    for key, value in goblin_stats.items(): 
-        print(f"{key} : {value}")
-
-def enemy_2_stats(): 
-    for key, value in dragon_stats.items():
-        print(f"{key} : {value}")
 
 def player_move():
     pass
 
 def player_attack():
     pass 
+
+#MY OWN CODE TRYING TO SEE IF I CAN GET IT TO WORK 
+isEquipped = False 
+
+def player_equip_sword(isEquipped, item_name):
+
+    if (hero_inventory.count("sword") <= 0):
+        print (f"You don't have a {item_name}")
+        return isEquipped
+    
+    #if (hero_inventory.count("sword") > 0):
+     #   print (f"You have a sword, would you like to equip it?")
+
+    else:
+        hero_inventory.remove("sword")
+
+        print(f"You have equipped the {item_name}, you can now attack enemies!")
+
+        print(f"Your inventory is now {hero_inventory}")
+        
+        return True
+    
+
+    
+
+
 
 def player_heal(item_name):
 
@@ -70,7 +97,8 @@ def use_item():
     match item_name:
 
         case "sword":
-            pass 
+            global isEquipped
+            isEquipped = player_equip_sword(isEquipped, item_name)
 
         case "health potion":
             player_heal(item_name)
@@ -81,16 +109,16 @@ def use_item():
         case _: 
             print(f"{item_name} is not in your inventory")
 
-#Temporary Function
+#Temporary Function for damaging player
 
 def damage_player(): 
     hero_stats["health"] = hero_stats["health"] - 10
     print(f"Your Health is now {hero_stats['health']}")
 
 
-isPlaying = True;
+isPlaying = True
 
-hero_stats["Name"] = input ("What is your name?\n")
+hero_stats["name"] = input ("What is your name?\n")
 
 player_stats()
 
@@ -98,6 +126,8 @@ player_stats()
 print("\nEnemy health:")
 for enemy, health in enemy_health.items():
     print(f"{enemy.capitalize()} has {health} health.")
+
+#While loop for having the game running 
 
 while (isPlaying):
 
@@ -111,8 +141,11 @@ while (isPlaying):
         isPlaying = quit() #<-- isPlaying = False 
 
     elif (action == "attack"):
-        #player_attack()
-        damage_player()
+        if isEquipped:
+        #player_attack() temporary commented out to test code 
+            damage_player()
+        else: 
+            print (f"You do not have a weapon equipped, please equip a weapon to be able to attack!")
     elif (action == "use"):
         use_item()
     elif (action == "move"):
