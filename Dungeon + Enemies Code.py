@@ -8,6 +8,10 @@
 
 #Hero stats shown in a dictionary 
 
+from hero import Hero 
+player = Hero()
+player.attack()
+
 hero_stats = {
     "name" : "hero", #key : value (name -> key) : (hero -> value)
     "strength" : 7,
@@ -23,8 +27,8 @@ health_potion_strength = 5
 hero_inventory = ["sword", "health potion", "rope"]
 
 enemy_health = {
-    "Fire Goblin": 30,
-    "Ice Dragon": 200
+    "Evil Wizard": 100,
+    "Magnificent Dragon": 200,
     }
 
 #Defining functions

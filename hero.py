@@ -4,16 +4,18 @@
 #Player Heal
 #Use items
 #Connect the class to the main code (connect the files)
+from character import Character
 
-
-class Hero():
+class Hero(Character):
     def __init__(self):
 
-        self.max_health = 100.0 
+        super().__init__()
+        #super.retreat()
+        #self.max_health = 100.0 
         #move health_potion_strength to a diff class
         self.health_potion_strength = 5
         self.stats = {
-            "name" : "hero",
+            "name" : "Hero",
             "strength" : 7,
             "health" : 100.0,
         }
@@ -63,15 +65,23 @@ class Hero():
     def use_item(self):
         pass 
 
+def main():
+    print ("This is where our program/game starts!")
+    hero = Hero()
+    hero.print_stats()
+    print("\n-----------------------------------------")
+    hero.set_name("Britney Bitch")
+    print("\n-----------------------------------------")
+    hero.stats["health"] = 70
+    print("\n-----------------------------------------")
+    hero.heal("health potion")
+    print("\n-----------------------------------------")
+    print (f"{hero.max_health}")
+    hero.retreat()
+    
+if __name__ == '__main__':
+    main()
+
 #-----------------------------
 #THIS IS TO TEST THE CLASS IS WORKING
 
-hero = Hero()
-hero.print_stats()
-print("\n-----------------------------------------")
-hero.set_name("Britney Bitch")
-print("\n-----------------------------------------")
-hero.stats["health"] = 70
-print("\n-----------------------------------------")
-hero.heal("health potion")
-print("\n-----------------------------------------")
