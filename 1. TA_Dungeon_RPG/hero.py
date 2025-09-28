@@ -37,6 +37,26 @@ class Hero(Character):
     def attack(self):
         pass 
 
+    isEquipped = False 
+
+    def equip_sword(self, isEquipped, item_name):
+
+        if (self.inventory.count("sword") <= 0):
+            print (f"You don't have a {item_name}")
+            return isEquipped
+        
+        #if (hero_inventory.count("sword") > 0):
+        #   print (f"You have a sword, would you like to equip it?")
+
+        else:
+            self.inventory.remove("sword")
+
+            print(f"You have equipped the {item_name}, you can now attack enemies!")
+
+            print(f"Your inventory is now {self.inventory}")
+            
+            return True
+
 #needs to be worked on more was def damage player in other script 
     def take_damage(self, damage):
         self.stats["health"] = self.stats["health"] - damage
@@ -52,7 +72,7 @@ class Hero(Character):
         self.stats["health"] = self.stats["health"] + self.health_potion_strength
 
         if (self.stats["health"] >= self.max_health):
-            print ("You've Reached Max Health!")
+            print ("You've at Max health you don't need a health potion!")
             self.stats["health"] = self.max_health
 
         else:
@@ -62,8 +82,23 @@ class Hero(Character):
             
             print(f"Your inventory is now {self.inventory}")
 
-    def use_item(self):
-        pass 
+    def use_item(self): 
+        item_name = input(f"What item do you want to use? {self.inventory}\n")
+        print (f"The item you want to use is {item_name}")
+        match item_name:
+
+            case "sword":
+                global isEquipped
+                isEquipped = self.equip_sword(isEquipped, item_name)
+
+            case "health potion":
+                self.heal(item_name)
+
+            case "rope":
+                pass 
+
+            case _: 
+                print(f"{item_name} is not in your inventory")
 
 def main():
     print ("This is where our program/game starts!")
@@ -77,7 +112,7 @@ def main():
     hero.heal("health potion")
     print("\n-----------------------------------------")
     print (f"{hero.max_health}")
-    hero.retreat()
+    #hero.retreat()
     
 if __name__ == '__main__':
     main()
