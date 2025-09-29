@@ -4,25 +4,23 @@
 #Allow for ins and functions for attacking and using an item
 # Create a graphical grid representation for the game wolrd, player position needs to be indicated and the player needs to be able to move 
 
-# REMEMEBER ALL VARIABLES ARE CASE SENSITIVE SO APPLY THIS LOGIC WHEN WRITING CODE
+#from hero import Hero 
+#player = Hero()
+#player.attack()
 
-#Hero stats shown in a dictionary 
-
-from hero import Hero 
-player = Hero()
-player.attack()
+import random
 
 hero_stats = {
-    "name" : "hero", #key : value (name -> key) : (hero -> value)
-    "strength" : 7,
+    "name" : "hero", 
+    "strength" : 50,
     "health" : 100.0,
 }
+
+hero = hero_stats
 
 hero_max_health = 100
 
 health_potion_strength = 5
-
-#The hero inventory is written in a list because a list can be modified
 
 hero_inventory = ["sword", "health potion", "rope"]
 
@@ -40,26 +38,10 @@ dragon_stats = {
     "health" : 300,
 }
 
-dragon_max_health = 300
-
-#ADD LATER IF TIME
-#wizard_attack_moves = {
-       #    "Ice Shard" ; 15,
-        #   "Multi-Shock" : 20,
-       #    "Poison Prison" : 25,
-       #    "Basic Brawl" : 5,
-
-
-#dragon_attack_moves = {
-         #  "Fire Ball" : 15,
-         #  "Cone of Flames" : 30,
-         #  "Ignition Blast" : 45
-        #   "Tail Swipe": 10
-
 
 #Defining functions
 
-def quit ():
+def exit ():
     print ("You Chose to Flee, You Are a Coward!\n")
     print ("GAME OVER!")
     return False
@@ -69,32 +51,55 @@ def player_stats ():
     for key, value in hero_stats.items():
         print(f"{key} : {value}" )
 
-def display_wizard_stats (wizard_stats):
-    print ("The Evil Wizard approaches, his stats are: ")
-    for key, value in wizard_stats.items():
+def display_enemy_stats (stats):
+    print (f"The {stats["name"]} approaches, his stats are: ")
+    for key, value in stats.items():
         print(f"{key} : {value}" )
     return #something
 
-def display_dragon_stats (dragon_stats):
-    print ("The Fire Dragon approaches, his stats are: ")
-    for key, value in dragon_stats.items():
-        print(f"{key} : {value}" )
-    return #something
+#def display_dragon_stats (dragon_stats):
+    #print ("The Fire Dragon approaches, his stats are: ")
+    #for key, value in dragon_stats.items():
+        #print(f"{key} : {value}" )
+    #return #something
 
 #damage from enemy to player
-def damage_player(enemy, player_health):
-    print ("You have been attacked by the  ")
-    return #something
 
-#damage from player to enemy
-def damage_enemy(hero, enemy):
-    damage = hero["strength"]
+def damage_player(enemy, hero_health):
+    hero_health = hero_health - enemy["strength"]
+    
+    return hero_health
+
+#SETTING UP PLAYER HEALTH NOT GOING BELOW 0
+# move to where enemy attacks hero
+# TODO: MOVE MOVE MOVE
+if hero_stats["health"] < 0:
+    hero_stats["health"] = 0 
+    print(f"Your health has been reduced to 0, GAME OVER!")
+
+
+#this now works yippee
+def deal_damage(hero, enemy_health):
+    #damage = - hero["strength"]
+
+    # for key, value in wizard_stats.items():
+
+    #     if "name" == "Evil Wizard":
+    #         enemy_health = wizard_stats["health"]
+
+    # for key, value in dragon_stats.items():
+    #     if "name" == "Fire Dragon":
+    #         enemy_health = dragon_stats["health"]
+
+    enemy_health = enemy_health - hero["strength"]
+    print(f"Enemy now has {enemy_health} health!")   
+
+    return enemy_health
+            
 
 def player_move():
     pass
 
-def player_attack():
-    pass 
 
 
 isEquipped = False 
@@ -157,48 +162,27 @@ def use_item():
         case _: 
             print(f"{item_name} is not in your inventory")
 
-
-#Temporary Function for damaging player
-
-player_health = hero_stats["health"]
-
-damage = enemy("strength")
-
-def damage_player(enemy, player_health):
-
-    player_health = hero_stats["health"] - damage
-
-    return player_health
-
-#SETTING UP PLAYER HEALTH NOT GOING BELOW 0
-
-if player_health < 0:
-    player_health = 0 
-    print(f"Your health has been reduced to 0, GAME OVER!")
-
-def damage_player(strength): 
-    player_health = hero_stats["health"] - dragon_stats["strength"]
-    print(f"You have been attacked by a Dragon, your health is now {hero_stats['health']}")
-
+#this function sets up the randomization of which enemy the player will encounter
+def pick_random_enemy():
+    if random.randint(0,13) > 10:
+        current_enemy_stats = dragon_stats
+    else:
+        current_enemy_stats = wizard_stats
+    return current_enemy_stats
 
 isPlaying = True
 
 hero_stats["name"] = input ("What is your name?\n")
 
 player_stats()
-display_dragon_stats(dragon_stats)
-display_wizard_stats(wizard_stats)
+current_enemy_stats = pick_random_enemy()
+display_enemy_stats(current_enemy_stats)
 
-
-#this is from the loop dictionaries slide I need to understand this fully before moving on to next section 
-#print("\nEnemy health:")
-#for enemy, health in enemy_health.items():
- #  print(f"{enemy.capitalize()} has {health} health.")
 
 #While loop for having the game running 
 
 while (isPlaying):
-
+    print(f"Player Turn:\n")
     action = input("\nSelect Action: Attack, Use, Move & Flee\n").lower()
 
     print(f"Player Action: {action}")
@@ -206,12 +190,16 @@ while (isPlaying):
     #The above code is an f string LOOK UP DOCUMENTATION FOR THIS 
 
     if (action == "flee"):
-        isPlaying = quit() #<-- isPlaying = False 
+        isPlaying = exit() #<-- isPlaying = False 
 
     elif (action == "attack"):
         if isEquipped:
-        #player_attack() temporary commented out to test code 
-        #damage_player()
+        #player_attack() #temporary commented out to test code 
+            current_enemy_stats["health"] = deal_damage(hero, current_enemy_stats["health"])
+            if current_enemy_stats["health"] <= 0:
+               current_enemy_stats["health"] = 0
+               print(f"The enemy has been slain!")
+               quit()
         else: 
             print (f"You do not have a weapon equipped, please equip a weapon to be able to attack!")
     elif (action == "use"):
@@ -220,3 +208,14 @@ while (isPlaying):
         player_move()
     else: 
         print (f"{action} is an invalid action") 
+
+    #this is now the enemy turn
+    print(f"\nEnemy Turn:\n")
+
+    hero_stats["health"] = damage_player(current_enemy_stats, hero_stats["health"])
+    if hero_stats["health"] <= 0:
+        hero_stats["health"] = 0 
+        print(f"Your health has been reduced to 0, GAME OVER!")
+        quit()
+    else:
+        print(f"{current_enemy_stats["name"]} has dealt {current_enemy_stats["strength"]}. You now have {hero_stats["health"]}")
